@@ -1,0 +1,145 @@
+Write a python script to perform CRUD operation on following table of "ESM.db" database.
+
+Employee ( eid, ename, dept, basic, branch). eid must be primary key.
+
+Department : Account, Inventory, IT, HR.
+
+Peform Following Operation.
+
+1. Create table:-
+A.
+	import sqlite3 as sq
+	con=sq.connect("c:\\sqlite3\\emp.db")
+	q="create table employee20(eid int primary key,ename text,dept text,basic int ,branch text)"
+	cur=con.cursor()
+	cur.execute(q)
+
+2. Insert 5 Records directly, 5 records using tuple and 5 records using taking input from user:-
+A. #insert record directy
+
+	q1="insert into employee20 	values(1,'vatsal','Account',5000,'bardoli'),(2,'harsh','IT',6000,'surat'),(3,'jay','HR',7000,'vyara'),(4,'hardik','IT',8000,'bardoli'),(5,'nikhil','Inventory',3000,'surat')"
+	cur=con.cursor()
+	cur.execute(q)
+
+#output
++-----+--------+-----------+-------+---------+
+| eid | ename  |   dept    | basic | branch  |
++-----+--------+-----------+-------+---------+
+| 1   | vatsal | Account   | 5000  | bardoli |
+| 2   | harsh  | IT        | 6000  | surat   |
+| 3   | jay    | HR        | 7000  | vyara   |
+| 4   | hardik | IT        | 8000  | bardoli |
+| 5   | nikhil | Inventory | 3000  | surat   |
++-----+--------+-----------+-------+---------+
+# insert record using tuple
+
+q="insert into employee20
+values(?,?,?,?,?)"
+v=[(6,'vishal','inventory',7000,'bardoli'),(7,'meet','Account',5000,'bardoli'),(8,'aryan','HR',4000,'surat'),(9,'yuvraj','IT',9000,'vyara'),(10,'prince','Account',6000,'surat')]
+cur=con.cursor()
+cur.executemany(q,v)
+#output
++-----+--------+-----------+-------+---------+
+| eid | ename  |   dept    | basic | branch  |
++-----+--------+-----------+-------+---------+
+| 6   | vishal | inventory | 7000  | bardoli |
+| 7   | meet   | Account   | 5000  | bardoli |
+| 8   | aryan  | HR        | 4000  | surat   |
+| 9   | yuvraj | IT        | 9000  | vyara   |
+| 10  | prince | Account   | 6000  | surat   |
++-----+--------+-----------+-------+---------+
+#insert record using user input
+q="insert into employee20
+values(?,?,?,?,?)"
+l=[]
+for i in range(5):
+    eid=int(input("Enter employee id:"))
+    ename=input("Enter name:")
+    dept=input("Enter departnment:")
+    basic=int(input("Enter basic salary:"))
+    branch=input("Enter branch:")
+    t=(eid,ename,dept,basic,branch)
+    l.append(t)
+cur=con.cursor()
+cur.executemany(q,l)
+#output
++-----+----------+-----------+-------+----------+
+| eid |  ename   |   dept    | basic |  branch  |
++-----+----------+-----------+-------+----------+
+| 11  | hiren    | HR        | 4000  | surat    |
+| 12  | jay      | IT        | 7000  | bardoli  |
+| 13  | om       | Account   | 2000  | vyara    |
+| 14  | rahul    | IT        | 6000  | surat    |
+| 15  | yuvraj   | Inventory | 5000  | vadodara |
++-----+----------+-----------+-------+----------+
+
+3. Update records who are from "Surat" branch with increment in salary 10%.
+A.
+q="update employee20 set basic=basic+(basic*10/100) where branch='surat'"
+cur=con.cursor()
+cur.execute(q)
+
+4. Print All records.
+A.
+q="select * from employee20"
+cur=con.cursor()
+cur.execute(q)
+v=cur.fetchall()	
+for i in v:
+    print(i)
+
+5. Print records where dept is "HR" and "IT".
+A.
+q="select * from employee20 where dept='HR' or dept='IT'"	
+cur=con.cursor()
+cur.execute(q)
+v=cur.fetchall()
+for i in v:
+    print(i)	
+
+6. Print records in sorting order of department.
+A.
+q="select * from employee20 order by dept"
+cur=con.cursor()
+cur.execute(q)
+v=cur.fetchall()
+for i in v:
+    print(i)
+	
+7. Print records where basic is >6000.
+A.
+q="select * from employee20 where basic >6000"	
+cur=con.cursor()
+cur.execute(q)
+v=cur.fetchall()
+for i in v:
+    print(i)
+
+8. Print records whrere employee name second character is "r".
+A.
+q="select * from employee20 where ename like '_r%'"
+cur=con.cursor()
+cur.execute(q)
+v=cur.fetchall()
+for i in v:
+    print(i)
+
+9. Grouping record of employee who are from "Account" and "Inventory".
+A.
+q="select * from employee20  where dept in('Account','Inventory')group by dept"
+cur=con.cursor()
+cur.execute(q)
+v=cur.fetchall()
+for i in v:
+    print(i)
+
+10. Print all records based on branch name in descending order:-
+A.
+q="select * from employee20 order by branch desc"
+cur=con.cursor()
+cur.execute(q)
+v=cur.fetchall()
+for i in v:
+    print(i)
+con.commit()
+con.close()
